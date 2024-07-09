@@ -49,9 +49,9 @@ def before_request() -> str:
     if not auth.require_auth(request.path, excluded_paths):
         return
     if auth.authorization_header(request) is None:
-        abort(401)
+        unauthorized(error)
     if auth.current_user(request) is None:
-        abort(403)
+        forbidden(error)
 
 
 if __name__ == "__main__":
