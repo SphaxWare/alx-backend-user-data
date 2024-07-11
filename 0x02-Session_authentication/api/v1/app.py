@@ -23,7 +23,12 @@ if (getenv("AUTH_TYPE") == "basic_auth"):
 if (getenv("AUTH_TYPE") == 'session_auth'):
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
-
+if (getenv("AUTH_TYPE") == "session_exp_auth"):
+    from api.v1.auth.session_exp_auth import SessionExpAuth
+    auth = SessionExpAuth()
+if (getenv('AUTH_TYPE') == "session_db_auth"):
+    from api.v1.auth.session_db_auth import SessionDBAuth
+    auth = SessionDBAuth()
 
 @app.errorhandler(404)
 def not_found(error) -> str:
