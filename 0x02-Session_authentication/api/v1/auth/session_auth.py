@@ -52,7 +52,7 @@ class SessionAuth(Auth):
         if user_id is None:
             return False
 
-         try:
+        try:
             del self.user_id_by_session_id[session_id]
         except Exception:
             pass
