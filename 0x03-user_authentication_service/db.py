@@ -6,9 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-
 from sqlalchemy.exc import NoResultFound, InvalidRequestError
-
+from typing import Dict
 from user import Base, User
 
 logging.disable(logging.WARNING)
@@ -42,8 +41,10 @@ class DB:
         self._session.commit()
         return new
 
-    def find_user_by(self, **kwargs) -> User:
-        """find users"""
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
+        """
+        Find a user by specified attributes.
+        """
         session = self._session
         try:
             user = session.query(User).filter_by(**kwargs).one()
