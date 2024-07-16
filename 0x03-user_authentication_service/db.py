@@ -47,8 +47,9 @@ class DB:
         Find a user by specified attributes.
         """
         try:
-            return self._session.query(User).filter_by(**kwargs).one()
+            user = self._session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
             raise InvalidRequestError()
+        return user
