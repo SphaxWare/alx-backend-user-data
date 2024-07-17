@@ -46,12 +46,12 @@ class DB:
         """
         Find a user by specified attributes.
         """
-        try:
-            user = self._session.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
-            raise NoResultFound("Not found")
-        except InvalidRequestError:
-            raise InvalidRequestError("Invalid")
+        user = self._session.query(User).filter_by(**kwargs).one()
+        if user is None:
+            raise NoResultFound()
+        for key, val in kwargs.items():
+            if not hasattr(user, key):
+                raise InvalidRequestError()
         return user
 
     def update_user(self, user_id: int, **kwargs) -> None:
@@ -59,8 +59,8 @@ class DB:
         update user using **kwargs
         """
         user = self.find_user_by(id=user_id)
-        for key, value in kwargs.items():
+        for key, val in kwargs.items():
             if not hasattr(user, key):
                 raise ValueError(f"User has no attribute '{key}'")
-            setattr(user, key, value)
+            setattr(user, key, val)
         self._session.commit()
