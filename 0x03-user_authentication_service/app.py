@@ -10,7 +10,7 @@ AUTH = Auth()
 def home():
     return jsonify({"message": "Bienvenue"})
 
-@app.route('/users' methods=["POST"])
+@app.route('/users', methods=["POST"])
 def users():
     """users post"""
     email = request.form.get("email")
