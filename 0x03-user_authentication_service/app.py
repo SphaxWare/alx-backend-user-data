@@ -8,12 +8,12 @@ AUTH = Auth()
 
 
 @app.route("/", methods=["GET"])
-def home():
+def home() -> str:
     return jsonify({"message": "Bienvenue"})
 
 
 @app.route('/users', methods=["POST"])
-def users():
+def users() -> str:
     """users post"""
     email = request.form.get("email")
     password = request.form.get("password")
@@ -26,6 +26,22 @@ def users():
         return jsonify({"email": user.email, "message": "user created"}), 200
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('sessions', methods=["POST"])
+def login() -> str:
+    """logging function"""
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    if not AUTH.valid_login(email, password):
+        abort(401)
+
+    session_id = AUTH.create_session(email)
+
+    res = jsonify({"email": email, "message": "logged in"})
+    res.set_cookie("session_id", session_id)
+    return res
 
 
 if __name__ == "__main__":
