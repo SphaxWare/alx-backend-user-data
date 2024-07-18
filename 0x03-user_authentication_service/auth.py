@@ -111,7 +111,10 @@ class Auth:
         db = self._db
         try:
             user = db.find_user_by(reset_token=reset_token)
-            db.update_user(user.id, password=password)
-            return None
         except NoResultFound:
             raise ValueError(f"User with {reset_token} doesnt exit")
+        hashed_password = _hash_password(password)
+        db.update_user(user.id,
+                       hashed_password=hashed_password,
+                       reset_token=None
+                       )
